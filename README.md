@@ -1,13 +1,14 @@
 # DApps-Scraping
 
-The main objective of this project is to study and analyze the quality of the decentralised applications available in some public repositories. This project scrapes the DApps websites and repositories such as the state of DApps and Dappradar
+The main objective of this project is to study and analyze the quality of the decentralised applications available in some public repositories. This project scrapes the DApps websites and repositories such as State of the DApps and DAppRadar.
 
-The extracted datasets are available in Zenodo : https://zenodo.org/record/3382127. 
-
+The extracted datasets are available in Zenodo: https://zenodo.org/record/3382127. 
+A long-term observation dataset is tracked here: https://github.com/serviceprototypinglab/dapps-dataset
 
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required packages.
+To acquire the required DApps metrics from websites, we have used the package Selenium which along with a custom driver and a corresponding web browser will have to be set up correctly.
 
 ```bash
 pip install -r requirements.txt
@@ -37,10 +38,12 @@ Use Chrome for debugging as well - in case the web pages change structure, type 
 
 ## Usage
 
-To scrape the required websites we have used the package Selenium.
-We have created three scripts:
+There is one Python script per DApps website.
+ - DappRadar.py: for dappradar.com
+ - stateDapps.py: for www.stateofthedapps.com
+ - dappcom.py: for dapp.com
 
-1. The first script is to crawl the DappRadar webpage. To run the script use the following command:
+To run the script (shown with the example of DappRadar), use the following command:
 
 ```bash
 python DappRadar.py
@@ -51,27 +54,13 @@ For testing purposes you can specify the number of pages you want to scrape. The
 python DappRadar.py 3 
 ```
 
-2. The second script scrapes the State of the Dapps website. The command to run the script is:
+You may specify fractional pages; i.e., as there are typically 50 entries per page, specifying 0.1 will fetch metrics on 5 DApps.
 
-```bash
-python stateDapps.py
-```
-For testing purposes you can specify the number of pages you want to scrape. The command below crawls only three pages.
-```bash
-python stateDapps.py 3
-```
-
-3. The third script scrapes the dapp.com website. The command to run the script is:
-
-```bash
-python dappcom.py
-```
-For testing purposes you can specify the number of pages you want to scrape. The command below crawls only three pages.
-```bash
-python dappcom.py 3
-```
 The scraping time depends on the number of the pages, and it may take 1 to 2 hours to fully run the script.
-Once the extraction are done, the scripts will generate plots from the extracted data and automatically save them in a folder with the website name and date of the run.
+Once the extractions are done, the scripts will generate plots from the extracted data and automatically save them in a folder with the website name and date of the run.
+
+You can customise the scraping by adding additional parameters: 'nosocial', 'noplot'
+This is again primarily of interest for testing.
 
 ## Disclaimer
 Be aware that web scraping is considered a bad practice. Please be advised that this was created for research and education purposes only.
