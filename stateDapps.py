@@ -60,7 +60,9 @@ for x in range(-1, math.ceil(pagen) - 1):
     df = pd.DataFrame()
   df = df.append(dfpage)
 
-dapplimit = int(50 * pagen / math.ceil(pagen))
+#dapplimit = int(50 * pagen / math.ceil(pagen))
+dapplimit = int(50 * pagen)
+print("Crawl DApps Total Length:", len(df), "capped at", dapplimit)
 df = df[:dapplimit]
 df.reset_index(inplace=True, drop=True)
 if not "nosocial" in sys.argv:
