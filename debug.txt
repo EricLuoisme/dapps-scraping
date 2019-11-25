@@ -1,0 +1,20 @@
+Crawl executable: /opt/google/chrome/google-chrome
+Crawl site: https://dappradar.com/rankings
+No Arguments :)
+Crawl pages (auto): 57
+Crawl DApps Index Length: 51 at index -1
+nextpage: //div[@data-heading='ID']/text()=51
+Traceback (most recent call last):
+  File "DappRadar.py", line 37, in <module>
+    nextp = driver.find_element_by_xpath(nextpath).click()
+  File "/usr/lib/python3/dist-packages/selenium/webdriver/remote/webelement.py", line 74, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "/usr/lib/python3/dist-packages/selenium/webdriver/remote/webelement.py", line 457, in _execute
+    return self._parent.execute(command, params)
+  File "/usr/lib/python3/dist-packages/selenium/webdriver/remote/webdriver.py", line 233, in execute
+    self.error_handler.check_response(response)
+  File "/usr/lib/python3/dist-packages/selenium/webdriver/remote/errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: element click intercepted: Element <button type="button" class="pagination--next btn-primary">...</button> is not clickable at point (866, 884). Other element would receive the click: <div class="rankings-row-desktop">...</div>
+  (Session info: chrome=77.0.3865.75)
+  (Driver info: chromedriver=77.0.3865.40 (f484704e052e0b556f8030b65b953dce96503217-refs/branch-heads/3865@{#442}),platform=Linux 4.9.0-6-amd64 x86_64)

@@ -13,9 +13,13 @@ filename = common_get("dappRadar")
 driver = common_start("https://dappradar.com/rankings")
 tree, pagen = common_pagen(driver)
 if pagen == -1:
-  pagen = int(tree.xpath('//ul[@class="pagination-list"]/li[last()]')[0].text_content())
+  # CHANGE 24.11.2019
+  #pagen = int(tree.xpath('//ul[@class="pagination-list"]/li[last()]')[0].text_content())
+  pagen = int(tree.xpath('//ul[@class="pagination--list"]/li[last()]')[0].text_content())
+  print("Crawl pages (auto):", pagen)
 
 links = []
+#time.sleep(5.0)
 
 # FIXME: missing columns due to web page changes; requires one more click to find out?
 #Volume7d= tree.xpath('.//div[@data-heading="Volume 7d"]/div/div[1]/text()')
@@ -24,22 +28,65 @@ links = []
 #Access each Dapp and extract more data
 for x in range(-1, math.ceil(pagen) - 1):
   if x != -1:
-    nextpath = "//button[@class='pagination-next']"
+    # CHANGE 24.11.2019
+    nextpath = "//button[@class='pagination--next btn-primary']"
+    #nextpath = "//button[@class='pagination-next']"
     #nextpathvisible = nextpath
     nextpathvisible = "//div[@data-heading='ID']/text()=" + str((x + 1) * 50 + 1)
     print("nextpage:", nextpathvisible)
-    nextp = driver.find_element_by_xpath(nextpath).click()
-    element_present = EC.presence_of_element_located((By.XPATH, nextpathvisible))
+
+    #nextp_button = driver.find_element_by_xpath(nextpath)
     try:
-      WebDriverWait(driver, waittime).until(element_present)
+        nextp_button = WebDriverWait(driver, waittime).until(EC.element_to_be_clickable((By.XPATH, nextpath)))
     except:
-      tree = html.fromstring(driver.page_source)
-      if tree.xpath(nextpathvisible):
-        print("nextpage: assume page load succeeded")
-      else:
+        tree = html.fromstring(driver.page_source)
+        print("nextpage: page load must have failed")
+        print(tree.xpath("//div[@data-heading='ID']/text()"))
         exit(1)
     else:
+        #print("nextpage: ok, clickable", nextp_button)
+        print("nextpage: ok, clickable")
+    driver.execute_script("arguments[0].scrollIntoView()", nextp_button)
+    nextp_button.click()
+
+    #actions = ActionChains(driver)
+    #actions.move_to_element(nextp_button).click().perform()
+
+    #try:
+    #  nextp = driver.find_element_by_xpath(nextpath).click()
+    #except:
+    #  print("hickup")
+    #  time.sleep(0.1)
+    #  nextp = driver.find_element_by_xpath(nextpath).click()
+
+    #element_present = EC.presence_of_element_located((By.XPATH, nextpathvisible))
+    #try:
+    #  WebDriverWait(driver, waittime).until(element_present)
+    #except:
+    #  tree = html.fromstring(driver.page_source)
+    #  print("X", tree.xpath("//div[@data-heading='ID']/text()"))
+    #  if tree.xpath(nextpathvisible):
+    #    print("nextpage: assume page load succeeded")
+    #  else:
+    #    print("nextpage: page load must have failed")
+    #    exit(1)
+    #else:
+    #  tree = html.fromstring(driver.page_source)
+    r = 0.1
+    rt = 0
+    while r < 3:
+      rt += r
+      r *= 2
+      time.sleep(r)
       tree = html.fromstring(driver.page_source)
+      vis = tree.xpath(nextpathvisible)
+      if vis:
+        break
+    print("nextpage status:", vis, "rt", rt)
+    if not vis:
+      print("nextpage: page load must have failed")
+      driver.quit()
+      exit(1)
 
   # CHANGE 05.11.2019
   #Name = tree.xpath('.//div[@class="column-flex column-name featured-dapp-name"]/@title')
@@ -64,6 +111,7 @@ for x in range(-1, math.ceil(pagen) - 1):
 
   if len(Name) != len(Category) or len(Category) != len(Balance) or len(Balance) != len(User) or len(User) != len(Volume24) or len(Volume24) != len(Txn24) or len(Txn24) != len(platform):
     print("Crawl ERROR: lengths", len(Name), len(Category), len(Balance), len(User), len(Volume24), len(Txn24), len(platform))
+    driver.quit()
     exit(1)
 
   dfpage = pd.DataFrame(list(zip(Name,Category,Balance,User,Volume24,Txn24,platform)), columns=['Name', 'category', 'Balance', 'User', 'Volume24', 'Txn24', 'platform'])

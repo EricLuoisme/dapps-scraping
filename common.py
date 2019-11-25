@@ -64,11 +64,11 @@ def common_start(dappsite):
   return driver
 
 def common_pagen(driver):
-  actions = ActionChains(driver)
+  #actions = ActionChains(driver)
   #Access the source page of the loaded page and extrct the required data based on the xpath
   tree = html.fromstring(driver.page_source)
   #currenturl = driver.current_url
-  if len(sys.argv) < 2:
+  if len(sys.argv) < 2 or sys.argv[1].startswith("no"):
       print("No Arguments :)")
       #pnumber=tree.xpath('//ul[@class="pagination-list"]/li[last()]/a/text()') # FIXME: This returns an empty list; it works with the expression below
       #pagen=int(pnumber[0])

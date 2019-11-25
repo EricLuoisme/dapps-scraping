@@ -15,6 +15,7 @@ tree, pagen = common_pagen(driver)
 if pagen == -1:
   pnumber = tree.xpath('//button[@class="button number last"]/span/text()')
   pagen = int(pnumber[0])
+  print("Crawl pages (auto):", pagen)
 
 links = []
 
@@ -33,6 +34,7 @@ for x in range(-1, math.ceil(pagen) - 1):
       if tree.xpath(nextpathvisible):
         print("nextpage: assume page load succeeded")
       else:
+        print("nextpage: page load must have failed")
         exit(1)
     else:
       tree = html.fromstring(driver.page_source)
