@@ -155,6 +155,8 @@ fig5.savefig(filename+'/dappsTxns.png',dpi=1000)
 plt.close(fig5)
 
 #Weekly transactions of the DApps in each platform
+#QUICKFIX 29.11.2019
+"""
 result.Txn7d = result.Txn7d.str.strip()
 result.Txn7d = result.Txn7d.str.replace(r",","")
 result.Txn7d = result.Txn7d.astype(int)
@@ -165,8 +167,11 @@ fig6 = plot.get_figure()
 fig6.tight_layout()
 fig6.savefig(filename+'/dappsTxnsWeekly.png',dpi=1000)
 plt.close(fig6)
+"""
 
 #Weekly Volume of the DApps in each platform
+#QUICKFIX 29.11.2019
+"""
 result.Volume7d = result.Volume7d.str.strip()
 result.Volume7d = result.Volume7d.str.replace(r",","")
 result.Volume7d = result.Volume7d.astype(float).astype(int)
@@ -177,6 +182,7 @@ fig7 = plot.get_figure()
 fig7.tight_layout()
 fig7.savefig(filename+'/dappsVolumeWeekly.png',dpi=1000)
 plt.close(fig7)
+"""
 
 #Number of smart contracts in each platform
 result.smartContracts = result.smartContracts.astype(int)
@@ -189,6 +195,8 @@ fig8.savefig(filename+'/smartContracts.png',dpi=1000)
 plt.close(fig8)
 
 #Total Balance of DApps in each platform
+#QUICKFIX 29.11.2019
+"""
 result.Balance = result.Balance.str.strip()
 result.Balance = result.Balance.str.replace(r",","")
 result.Balance = result.Balance.astype(int)
@@ -199,7 +207,7 @@ fig9 = plot.get_figure()
 fig9.tight_layout()
 fig9.savefig(filename+'/dppsBalance.png',dpi=1000)
 plt.close(fig9)
-
+"""
 
 result.to_csv(filename+'/DappCom.csv', index=False)
 
