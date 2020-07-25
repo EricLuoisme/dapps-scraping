@@ -1,5 +1,10 @@
 chromedriver
+chrome-dl
+google-chrome-*.deb
+
 dappRadar-*
 stateDapps-*
 *.old
 *.log
+
+_*

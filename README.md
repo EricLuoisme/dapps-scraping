@@ -22,7 +22,7 @@ For Linux and Mac OS users, run the following script to download the chrome driv
 ```bash
 ./download.sh 
 ```
-#### Please make sure that the version of you chrome is 76, otherwise update your chrome or install the chrome driver for your version.
+#### Please make sure that the version of you chrome matches, otherwise update your chrome or install the chrome driver for your version; see downloadchrome.doc.
 
 For Mac users, please make sure you have wget installed in your system, use the following command to install it:
 
@@ -30,18 +30,18 @@ For Mac users, please make sure you have wget installed in your system, use the 
 brew install wget 
 ```
 
-Once the driver is downloaded, please check the path of the chrome driver to both scripts (DappRadar.py, stateDapps.py).
-if you have downloaded the chrome driver manually, please change the path specified in the codes to your own path. You don't have to change the path if you have used the script to download your driver.
+Once the driver is downloaded, please check the path of the chrome driver in the common script (common.py).
+If you have downloaded the chrome driver manually, please change the path specified in the codes to your own path. You don't have to change the path if you have used the script to download your driver.
 
 Note: Google Chrome must also be present in the corresponding version. See the text file downloadchrome.doc for details.
 Use Chrome for debugging as well - in case the web pages change structure, type Ctrl+Shift+I and use the pointer tool with Ctrl+Shift+C to find out the new XPath expressions.
 
 ## Usage
 
-There is one Python script per DApps website.
+There is one Python script per DApps website, and a common script for typical crawling and pagination actions.
  - DappRadar.py: for dappradar.com
  - stateDapps.py: for www.stateofthedapps.com
- - dappcom.py: for dapp.com
+ - dappcom.py: for dapp.com (-> dappcomall.py exists as workaround)
 
 To run the script (shown with the example of DappRadar), use the following command:
 

@@ -6,6 +6,8 @@ Created on Tue Jul 30 11:04:44 2019
 @author: elyhabaro
 """
 
+## TODO 25.07.2020: first entry (ad) appears sometimes but not always; needs to filter on rel="noopener external nofollow sponsored"; see workaround below
+
 from common import *
 import common
 
@@ -106,8 +108,10 @@ for x in range(-1, math.ceil(pagen) - 1):
 
   # CHANGE 05.11.2019
   #dapplinks = [link.get_attribute('href') for link in driver.find_elements_by_xpath("//div[@class='column-flex column-name']/a")]
-  dapplinks = [link.get_attribute('href') for link in driver.find_elements_by_xpath("//a[@class='rankings-row']")]
-  links.extend(dapplinks[1:])
+  # CHANGE 25.07.2020
+  #dapplinks = [link.get_attribute('href') for link in driver.find_elements_by_xpath("//a[@class='rankings-row']")]
+  dapplinks = [link.get_attribute('href') for link in driver.find_elements_by_xpath("//a[@class='rankings-row css-1p5cfpf']")]
+  links.extend(dapplinks[0:])
 
   if len(Name) != len(Category) or len(Category) != len(Balance) or len(Balance) != len(User) or len(User) != len(Volume24) or len(Volume24) != len(Txn24) or len(Txn24) != len(platform):
     print("Crawl ERROR: lengths", len(Name), len(Category), len(Balance), len(User), len(Volume24), len(Txn24), len(platform))
@@ -119,16 +123,23 @@ for x in range(-1, math.ceil(pagen) - 1):
 
   if x == -1:
     df = pd.DataFrame()
-  df = df.append(dfpage[1:])
+  # 25.07.2020 workaround for random ads
+  if len(dfpage) > len(dapplinks):
+    df = df.append(dfpage[1:])
+  else:
+    df = df.append(dfpage[0:])
 
 #dapplimit = int(50 * pagen / math.ceil(pagen))
 dapplimit = int(50 * pagen)
 print("Crawl DApps Total Length:", len(df), "capped at", dapplimit)
 df = df[:dapplimit]
 df.reset_index(inplace=True, drop=True)
+## 25.07.2020 adjust limit
+if dapplimit > len(df):
+  dapplimit = len(df)
 if not "nosocial" in sys.argv:
-  print("Crawl DApps:", dapplimit)
-  #print("DApps:", df)
+  print("Crawl DApps:", dapplimit, "with links", len(links))
+  print("DApps:", df)
 else:
   print("Skip crawling DApps.")
 
@@ -186,8 +197,11 @@ while linkid < dapplimit and not "nosocial" in sys.argv:
         # CHANGE 05.11.2019
         #dappLink = tree.xpath('//div[@class="dapp-links"]/a/@href')[0]
         #smartContract = tree.xpath('//div[@class="card card-contracts"]/header/p/span/text()')[0]
-        dappLink = tree.xpath('//a[@class="button is-primary article-page__cta"]/@href')[0]
-        smartContract = tree.xpath('//span[@class="tag"]/text()')[0]
+        # CHANGE 25.07.2020
+        #dappLink = tree.xpath('//a[@class="button is-primary article-page__cta"]/@href')[0]
+        #smartContract = tree.xpath('//span[@class="tag"]/text()')[0]
+        dappLink = tree.xpath('//a[@class="button article-page__cta"]/@href')[0]
+        smartContract = tree.xpath('//div[@class="css-j0jyzn"]/text()')[0]
     except:
         print("Bailout smart contracts:", link)
         dappLink = ''
@@ -306,8 +320,10 @@ else:
 
   #Convert smart contracts column to integer 
   result['smartContract'] = result['smartContract'].astype(str)
-  result['smartContract'] = result['smartContract'].map(lambda x: x.lstrip("['").rstrip("']"))
-  result['smartContract'] = result['smartContract'].replace('', '0')
+  # 25.07.2020
+  #result['smartContract'] = result['smartContract'].map(lambda x: x.lstrip("['").rstrip("']"))
+  #result['smartContract'] = result['smartContract'].replace('', '0')
+  result['smartContract'] = result['smartContract'].map(lambda x: x.split("\xa0")[0])
   result['smartContract'] = result['smartContract'].astype(int)
 
   #number of smart contracts for each blockchain platform

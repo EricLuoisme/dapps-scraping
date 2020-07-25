@@ -1,7 +1,8 @@
 uname -a | grep -q Linux
 
 #version=76.0.3809.68
-version=77.0.3865.40
+#version=77.0.3865.40
+version=84.0.4147.30
 
 if [ $? = 0 ]
 then

@@ -2,24 +2,28 @@ sudo touch /etc/default/google-chrome
 ...
 
 # download latest .deb file from https://www.google.com/chrome/
-# this must be done manually
+# this must be done manually; or perhaps not:
+# -> wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
-sudo apt-get install libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxrandr2 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 libpangocairo-1.0-0 libgtk-3-0
+sudo apt-get install libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxrandr2 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 libpangocairo-1.0-0 libgtk-3-0 libgbm1
 
 sudo apt-get install python3-lxml python3-pandas python3-matplotlib python3-selenium python3-openpyxl
 # or: pip install -r requirements.txt
 
 sudo apt install xvfb
 
+mkdir chrome-dl
+cd chrome-dl
 ar x ../google-chrome-stable_current_amd64.deb
 tar xvf data.tar.xz
 cd opt/google/
+sudo mkdir /opt/google
 sudo mv chrome/ /opt/google/
 sudo chown root:root /opt/google/chrome/chrome-sandbox
 sudo chmod 4755 /opt/google/chrome/chrome-sandbox
 /opt/google/chrome/google-chrome --version
 
-# currently: version 77.x - must correspond to chromedriver version
+# currently: version 84.x - must correspond to chromedriver version
 
 # run in actual headless mode:
 # python3 DappRadar.py 1
