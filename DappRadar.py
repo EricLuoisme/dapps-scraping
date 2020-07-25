@@ -13,6 +13,7 @@ import common
 
 filename = common_get("dappRadar")
 driver = common_start("https://dappradar.com/rankings")
+time.sleep(1)
 tree, pagen = common_pagen(driver)
 if pagen == -1:
   # CHANGE 24.11.2019
@@ -30,26 +31,36 @@ links = []
 #Access each Dapp and extract more data
 for x in range(-1, math.ceil(pagen) - 1):
   if x != -1:
+    # CHANGE 25.07.2020
+    nextpath = "//a[@class='pagination--next btn-primary']/@href"
     # CHANGE 24.11.2019
-    nextpath = "//button[@class='pagination--next btn-primary']"
+    #nextpath = "//button[@class='pagination--next btn-primary']"
     #nextpath = "//button[@class='pagination-next']"
     #nextpathvisible = nextpath
-    nextpathvisible = "//div[@data-heading='ID']/text()=" + str((x + 1) * 50 + 1)
-    print("nextpage:", nextpathvisible)
+#    nextpathvisible = "//div[@data-heading='ID']/text()=" + str((x + 1) * 50 + 1)
+#    print("nextpage:", nextpathvisible)
 
     #nextp_button = driver.find_element_by_xpath(nextpath)
-    try:
-        nextp_button = WebDriverWait(driver, waittime).until(EC.element_to_be_clickable((By.XPATH, nextpath)))
-    except:
-        tree = html.fromstring(driver.page_source)
-        print("nextpage: page load must have failed")
-        print(tree.xpath("//div[@data-heading='ID']/text()"))
-        exit(1)
-    else:
-        #print("nextpage: ok, clickable", nextp_button)
-        print("nextpage: ok, clickable")
-    driver.execute_script("arguments[0].scrollIntoView()", nextp_button)
-    nextp_button.click()
+    # CHANGE 25.07.2020
+    link = tree.xpath(nextpath)[0]
+    link = "https://dappradar.com" + link
+    print("nextpage:", link)
+    driver.get(link)
+    time.sleep(1)
+    tree = html.fromstring(driver.page_source)
+
+#    try:
+#        nextp_button = WebDriverWait(driver, waittime).until(EC.element_to_be_clickable((By.XPATH, nextpath)))
+#    except:
+#        tree = html.fromstring(driver.page_source)
+#        print("nextpage: page load must have failed directly")
+#        print(tree.xpath("//div[@data-heading='ID']/text()"))
+#        exit(1)
+#    else:
+#        #print("nextpage: ok, clickable", nextp_button)
+#        print("nextpage: ok, clickable")
+#    driver.execute_script("arguments[0].scrollIntoView()", nextp_button)
+#    nextp_button.click()
 
     #actions = ActionChains(driver)
     #actions.move_to_element(nextp_button).click().perform()
@@ -74,21 +85,21 @@ for x in range(-1, math.ceil(pagen) - 1):
     #    exit(1)
     #else:
     #  tree = html.fromstring(driver.page_source)
-    r = 0.1
-    rt = 0
-    while r < 3:
-      rt += r
-      r *= 2
-      time.sleep(r)
-      tree = html.fromstring(driver.page_source)
-      vis = tree.xpath(nextpathvisible)
-      if vis:
-        break
-    print("nextpage status:", vis, "rt", rt)
-    if not vis:
-      print("nextpage: page load must have failed")
-      driver.quit()
-      exit(1)
+#    r = 0.1
+#    rt = 0
+#    while r < 3:
+#      rt += r
+#      r *= 2
+#      time.sleep(r)
+#      tree = html.fromstring(driver.page_source)
+#      vis = tree.xpath(nextpathvisible)
+#      if vis:
+#        break
+#    print("nextpage status:", vis, "rt", rt)
+#    if not vis:
+#      print("nextpage: page load must have failed")
+#      driver.quit()
+#      exit(1)
 
   # CHANGE 05.11.2019
   #Name = tree.xpath('.//div[@class="column-flex column-name featured-dapp-name"]/@title')
@@ -152,6 +163,7 @@ while linkid < dapplimit and not "nosocial" in sys.argv:
     bailout = False
     print("DApp", link)
     driver.get(link)
+    time.sleep(0.5)
     #WebDriverWait(driver, 1)
     tree = html.fromstring(driver.page_source)
     try:
@@ -234,6 +246,10 @@ os.mkdir(filename)
 # TODO ERROR -- TypeError: unhashable type: 'list'
 #result.describe(include=['object'])
 #print(result) # alternative to the above
+
+#save the dataframe to spreadsheet file
+#result.to_excel(filename+'/DappRadar.xlsx', index=False)
+result.to_csv(filename+'/DappRadar.csv', index=False)
 
 if "noplot" in sys.argv:
   print("Skip plotting.")
@@ -334,10 +350,6 @@ else:
   fig9.tight_layout()
   fig9.savefig(filename+'/smartcontracts.png',dpi=1000)
   plt.close(fig9)
-
-#save the dataframe to spreadsheet file
-#result.to_excel(filename+'/DappRadar.xlsx', index=False)
-result.to_csv(filename+'/DappRadar.csv', index=False)
 
 #compare the file with the previous file
 today = date.today()
