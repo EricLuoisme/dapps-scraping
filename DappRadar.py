@@ -247,10 +247,6 @@ os.mkdir(filename)
 #result.describe(include=['object'])
 #print(result) # alternative to the above
 
-#save the dataframe to spreadsheet file
-#result.to_excel(filename+'/DappRadar.xlsx', index=False)
-result.to_csv(filename+'/DappRadar.csv', index=False)
-
 if "noplot" in sys.argv:
   print("Skip plotting.")
 else:
@@ -339,7 +335,7 @@ else:
   # 25.07.2020
   #result['smartContract'] = result['smartContract'].map(lambda x: x.lstrip("['").rstrip("']"))
   #result['smartContract'] = result['smartContract'].replace('', '0')
-  result['smartContract'] = result['smartContract'].map(lambda x: x.split("\xa0")[0])
+  result['smartContract'] = result['smartContract'].map(lambda x: x.split(" ")[0].split("\xa0")[0])
   result['smartContract'] = result['smartContract'].astype(int)
 
   #number of smart contracts for each blockchain platform
@@ -350,6 +346,10 @@ else:
   fig9.tight_layout()
   fig9.savefig(filename+'/smartcontracts.png',dpi=1000)
   plt.close(fig9)
+
+#save the dataframe to spreadsheet file
+#result.to_excel(filename+'/DappRadar.xlsx', index=False)
+result.to_csv(filename+'/DappRadar.csv', index=False)
 
 #compare the file with the previous file
 today = date.today()
