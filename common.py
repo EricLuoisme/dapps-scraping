@@ -42,7 +42,7 @@ def is_element_present(driver, what):
     return True
 
 waittime = 4
-browserpath = "/opt/google/chrome/google-chrome"
+browserpath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
 def common_start(dappsite):
   print("Crawl date:", datetime.datetime.now().isoformat())
