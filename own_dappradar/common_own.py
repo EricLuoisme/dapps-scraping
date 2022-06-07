@@ -46,6 +46,8 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
     month = today.strftime("%m")
     day = today.strftime("%d")
 
+    filelist = []
+
     for k, v in cateMap.items():
         filename = filepath + "/" + k + "_" + year + "-" + month + "-" + day + ".json"
         driver.get(baseReqUrl + v)
@@ -55,4 +57,5 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
         file.write(driver.find_element_by_xpath("/html/body").text)
         file.close()
         print(">>> finish store file:" + filename)
-    return
+        filelist.append(filename)
+    return filelist

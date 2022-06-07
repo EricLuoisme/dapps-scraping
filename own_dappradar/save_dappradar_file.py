@@ -16,7 +16,9 @@ cate_map[
 
 if __name__ == '__main__':
     driver = co.common_start(connection_base)
-    # try one first
-    co.req_save_file(driver, file_path, base_url, cate_map)
-    print("<<< finished")
+    filelist = co.req_save_file(driver, file_path, base_url, cate_map)
+    sin_file_name = ""
+    for v in filelist:
+        sin_file_name += v + ","
+    print(sin_file_name)
     sys.exit()
