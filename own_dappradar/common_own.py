@@ -41,6 +41,7 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
     Do all request in cateMap and store them as json into .html file
     """
 
+    sum = 0
     today = datetime.datetime.now()
     year = today.strftime("%Y")
     month = today.strftime("%m")
@@ -49,6 +50,9 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
     filelist = []
 
     for k, v in cateMap.items():
+        print(">>> Start consuming the No." + str(sum) + ", cate: " + k)
+        sum += 1
+
         filename = filepath + "/" + k + "_" + year + "-" + month + "-" + day + ".json"
         driver.get(baseReqUrl + v)
         time.sleep(1)
@@ -56,6 +60,7 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
         file = open(filename, 'w')
         file.write(driver.find_element_by_xpath("/html/body").text)
         file.close()
-        print(">>> finish store file:" + filename)
+        print("<<< Finish store file:" + filename)
         filelist.append(filename)
+
     return filelist
