@@ -42,10 +42,10 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
     """
 
     sum = 0
-    today = datetime.datetime.now()
-    year = today.strftime("%Y")
-    month = today.strftime("%m")
-    day = today.strftime("%d")
+    # today = datetime.datetime.now()
+    # year = today.strftime("%Y")
+    # month = today.strftime("%m")
+    # day = today.strftime("%d")
 
     filelist = []
 
@@ -53,7 +53,7 @@ def req_save_file(driver, filepath, baseReqUrl, cateMap):
         print(">>> Start consuming the No." + str(sum) + ", cate: " + k)
         sum += 1
 
-        filename = filepath + "/" + k + "_" + year + "-" + month + "-" + day + ".json"
+        filename = filepath + "/" + k + ".json"
         driver.get(baseReqUrl + v)
         time.sleep(1)
 
